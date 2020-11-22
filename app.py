@@ -61,3 +61,20 @@ def precipitation():
 
     return jsonify(precip_list)
 
+@app.route("/api/v1.0/stations")
+def stations():
+    """Returns list of all stations"""
+
+    # Creates a session (link) from Python to the DB
+    session = Session(engine)
+
+    # Queries every station
+    station_results = session.query(Station.name).all()
+
+    # Closes the session
+    session.close()
+
+    # Creates a list of all the stations
+    station_list = list(np.ravel(results))
+
+    return jsonify(station_list)
