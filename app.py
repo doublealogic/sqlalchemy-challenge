@@ -78,3 +78,28 @@ def stations():
     station_list = list(np.ravel(station_results))
 
     return jsonify(station_list)
+
+@app.route("/api/v1.0/tobs")
+def tobs():
+
+    # Creates a session (link) from Python to the DB
+    session = Session(engine)
+
+    # Queries last 12 months of precipitation data for most active station from Measurement Table
+    tobs_results = session.query(Measurement.date, Measurement.tobs).\
+                filter(Measurement.date <= '2017-08-23').\
+                filter(Measurement.date >= '2016-08-23').\
+                filter(Measurement.station == 'USC00519281')
+
+    # Closes the session
+    session.close()
+
+    # Converts above results to a dictionary
+    tobs_list = []
+    for date, tobs in tobs_results:
+        tobs_dict = {}
+        tobs_dict["date"] = date
+        tobs_dict["tobs"] = tobs
+        tobs_list.append(tobs_dict)
+
+    return jsonify(tobs_list)
