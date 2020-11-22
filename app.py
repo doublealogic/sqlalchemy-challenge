@@ -34,6 +34,30 @@ def welcome():
         f"/api/v1.0/precipitation<br/>"
         f"/api/v1.0/stations<br/>"
         f"/api/v1.0/tobs<br/>"
-        f"/api/v1.0/<start>/ add a start date there in YYYY-MM-DD format<br/>"
-        f"/api/v1.0/<start>/<end>/ add both and a start and end date there in YYYY-MM-DD format"
+        f"/api/v1.0/<start>/ place YYYY-MM-DD format date in 'start' <br/>"
+        f"/api/v1.0/<start>/<end>/ place YYYY-MM-DD format dates in both 'start' and 'end' "
     )
+
+@app.route("/api/v1.0/precipitation")
+def precipitation():
+    """Returns list of all precipitation measurements recorded"""
+
+    # Creates a session (link) from Python to the DB
+    session = Session(engine)
+
+    # Queries precipitation measurements recorded on each date from the data
+    precip_results = session.query(Measurement.date, Measurement.prcp).all()
+
+    # Closes the session
+    session.close()
+
+    # Converts the above results to a dictionary
+    precip_list = []
+    for date, prcp in precip_results:
+        precip_dict = {}
+        precip_dict["date"] = date
+        precip_dict["prcp"] = prcp
+        precip_list.append(precip_dict)
+
+    return jsonify(precip_list)
+
