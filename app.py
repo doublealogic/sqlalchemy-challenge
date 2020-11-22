@@ -107,6 +107,7 @@ def tobs():
 
 @app.route("/api/v1.0/<start>")
 def start(start):
+    """Returns list of all temperature observations from state date"""
 
     # Creates a session (link) from Python to the DB
     session = Session(engine)
@@ -116,7 +117,8 @@ def start(start):
             func.min(Measurement.tobs),\
             func.max(Measurement.tobs),\
             func.avg(Measurement.tobs)).\
-            filter(Measurement.date >= start)
+            filter(Measurement.date >= start).\
+            group_by(Measurement.date).all()
 
     # Closes the session
     session.close()
@@ -132,3 +134,34 @@ def start(start):
         start_list.append(start_dict)
 
     return jsonify(start_list)
+
+@app.route("/api/v1.0/<start>/<end>")
+def start_n_end(start, end):
+    """Returns list of all temperature observations between and including both the start and end dates"""
+
+    # Creates a session (link) from Python to the DB
+    session = Session(engine)
+
+    # Queries all Min Temperatures, Max Temperatures and Average Temperatures from the start date to the present
+    start_n_end_results = session.query(Measurement.station,\
+            func.min(Measurement.tobs),\
+            func.max(Measurement.tobs),\
+            func.avg(Measurement.tobs)).\
+            filter(Measurement.date >= start).\
+            filter(Measurement.date <= end).\
+            group_by(Measurement.date).all()
+
+    # Closes the session
+    session.close()
+
+    # Converts the above results to a dictionary, then appended to a list
+    start_n_end_list = []
+    for date, tmin, tmax, tavg in start_n_end_results:
+        start_n_end_dict = {}
+        start_n_end_dict["date"] = date
+        start_n_end_dict["min"] = tmin
+        start_n_end_dict["max"] = tmax
+        start_n_end_dict["avg"] = tavg
+        start_n_end_list.append(start_n_end_dict)
+
+    return jsonify(start_n_end_list)
