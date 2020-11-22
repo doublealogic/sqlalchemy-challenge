@@ -43,3 +43,39 @@ All of the following analysis was completed using SQLAlchemy ORM queries, Pandas
     * Filtered by the station with the highest number of observations.
 
     * Plotted the results as a histogram with `bins=12`
+
+
+## Step 2 - Climate App
+For this part I designed a Flask API based on the queries from Step 1 and I'll use Flask to create my routes.
+
+### Routes
+
+* `/`
+
+    * Home page.
+
+    * Lists all routes that are available.
+
+* `/api/v1.0/precipitation`
+
+    * Converts the query results to a dictionary using `date` as the key and `prcp` as the value.
+
+    * Returns the JSON representation of my dictionary.
+
+* `/api/v1.0/stations`
+
+    * Returns a JSON list of stations from the dataset.
+
+* `/api/v1.0/tobs`
+
+    * Queries the dates and temperature observations of the most active station for the last year of data.
+
+    * Returns a JSON list of temperature observations (TOBS) for the previous year.
+
+* `api/v1.0/<start>` and `/api/v1.0/<start>/<end>`
+
+    * Returns a JSON list of the minimum temperature, average temperature and max temperature for a given start or start-end range.
+
+    * When given the start only, calculates `TMIN`, `TAVG` and `TMAX` for all dates greater than and equal to the start date.
+
+    * When given the start and the end date, calculate thes `TMIN`, `TAVG`, and `TMAX` for dates between the start and end date inclusive.
