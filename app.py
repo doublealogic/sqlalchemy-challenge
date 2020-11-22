@@ -51,7 +51,7 @@ def precipitation():
     # Closes the session
     session.close()
 
-    # Converts the above results to a dictionary
+    # Converts the above results to a dictionary, then appended to a list
     precip_list = []
     for date, prcp in precip_results:
         precip_dict = {}
@@ -81,6 +81,7 @@ def stations():
 
 @app.route("/api/v1.0/tobs")
 def tobs():
+    """Returns list of last 12 months of temperature observations from most active station"""
 
     # Creates a session (link) from Python to the DB
     session = Session(engine)
@@ -94,7 +95,7 @@ def tobs():
     # Closes the session
     session.close()
 
-    # Converts above results to a dictionary
+    # Converts the above results to a dictionary, then appended to a list
     tobs_list = []
     for date, tobs in tobs_results:
         tobs_dict = {}
@@ -103,3 +104,31 @@ def tobs():
         tobs_list.append(tobs_dict)
 
     return jsonify(tobs_list)
+
+@app.route("/api/v1.0/<start>")
+def start(start):
+
+    # Creates a session (link) from Python to the DB
+    session = Session(engine)
+
+    # Queries all Min Temperatures, Max Temperatures and Average Temperatures from the start date to the present
+    start_results = session.query(Measurement.station,\
+            func.min(Measurement.tobs),\
+            func.max(Measurement.tobs),\
+            func.avg(Measurement.tobs)).\
+            filter(Measurement.date >= start)
+
+    # Closes the session
+    session.close()
+
+    # Converts the above results to a dictionary, then appended to a list
+    start_list = []
+    for date, tmin, tmax, tavg in start_results:
+        start_dict = {}
+        start_dict["date"] = date
+        start_dict["min"] = tmin
+        start_dict["max"] = tmax
+        start_dict["avg"] = tavg
+        start_list.append(start_dict)
+
+    return jsonify(start_list)
