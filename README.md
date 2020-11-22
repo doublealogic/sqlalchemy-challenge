@@ -27,3 +27,19 @@ All of the following analysis was completed using SQLAlchemy ORM queries, Pandas
 * Plotted the results using the DataFrame `plot` method.
 
 * Last used Pandas to print the summary statistics for the precipitation data.
+
+### Station Analysis 
+
+* Designed a query to calculate the total number of stations.
+
+* Designed a query to find the most active stations.
+
+    * Listed the stations and their observation counts in descending order.
+
+    * Used functions `func.min`, `func.max`, `func.avg` and `func.count` in the query to help with this process.
+
+* Designed a query to retrieve the last 12 months of temperature observation data (TOBS).
+
+    * Filtered by the station with the highest number of observations.
+
+    * Plotted the results as a histogram with `bins=12`
