@@ -75,6 +75,6 @@ def stations():
     session.close()
 
     # Creates a list of all the stations
-    station_list = list(np.ravel(results))
+    station_list = list(np.ravel(station_results))
 
     return jsonify(station_list)
