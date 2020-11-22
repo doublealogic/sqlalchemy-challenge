@@ -13,3 +13,17 @@ All of the following analysis was completed using SQLAlchemy ORM queries, Pandas
 * First I used SQLAlchemy `create_engine` to connect to my sqlite database.
 
 * Next I used SQLAlchemy `automap_base()` to reflect my tables into classes and saved a reference to those classes using variables called `Measurement` and `Station`.
+
+### Precipitation Analysis
+
+* Designed a query to retrieve the last 12 months of precipitation data.
+
+* Selected only the `date` and `prcp` values to use for this query.
+
+* Loaded the query results into a Pandas DataFrame and set the index to the date column.
+
+* Sorted the DataFrame values by `date`.
+
+* Plotted the results using the DataFrame `plot` method.
+
+* Last used Pandas to print the summary statistics for the precipitation data.
