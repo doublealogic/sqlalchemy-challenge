@@ -165,3 +165,6 @@ def start_n_end(start, end):
         start_n_end_list.append(start_n_end_dict)
 
     return jsonify(start_n_end_list)
+
+    if name == 'main':
+        app.run(debug=True)
